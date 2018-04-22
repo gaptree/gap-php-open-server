@@ -6,4 +6,5 @@ use Gap\Open\Dto\RefreshTokenDto;
 interface RefreshTokenRepoInterface
 {
     public function create(RefreshTokenDto $refreshToken): void;
+    public function fetch(string $refresh): RefreshTokenDto;
 }

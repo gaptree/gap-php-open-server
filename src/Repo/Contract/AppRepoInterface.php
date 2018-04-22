@@ -6,4 +6,5 @@ use Gap\Open\Dto\AppDto;
 interface AppRepoInterface
 {
     public function create(AppDto $app): void;
+    public function fetch(string $appId): ?AppDto;
 }

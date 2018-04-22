@@ -1,0 +1,4 @@
+parameters:
+    ignoreErrors:
+        - '#Parameter \#[0-9]+ \$[a-zA-Z0-9\\_]+ of [^,]+, PHPUnit\\Framework\\MockObject\\MockObject given#'
+        - '#Parameter \#2 \$key of method [a-zA-Z0-9\\_]+::verify\(\)#'

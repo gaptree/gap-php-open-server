@@ -38,7 +38,7 @@ class AppRepo extends RepoBase implements Contract\AppRepoInterface
             ->execute();
     }
 
-    public function fetch(string $appId): AppDto
+    public function fetch(string $appId): ?AppDto
     {
         return $this->cnn->ssb()
             ->select(
@@ -49,7 +49,7 @@ class AppRepo extends RepoBase implements Contract\AppRepoInterface
                 'privilege',
                 'scope',
                 'created',
-                'expired'
+                'changed'
             )
             ->from($this->table)->end()
             ->where()

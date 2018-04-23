@@ -17,6 +17,10 @@ abstract class ServiceBase
 
     protected function randomCode(int $length = 36): string
     {
-        return base64_encode(random_bytes($length));
+        return str_replace(
+            str_split('{}()/\@:'),
+            '-',
+            base64_encode(random_bytes($length))
+        );
     }
 }

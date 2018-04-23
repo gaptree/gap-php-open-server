@@ -51,7 +51,7 @@ class ClientCdGrantTest extends TestCase
         $insertStmt = $stmts[1];
 
         $this->assertEquals(
-            'SELECT appId, appSecret, appName, redirectUrl, privilege, scope, created, expired '
+            'SELECT appId, appSecret, appName, redirectUrl, privilege, scope, created, changed '
             . 'FROM open_app WHERE appId = :k1 LIMIT 1',
             $fetchAppStmt->sql()
         );

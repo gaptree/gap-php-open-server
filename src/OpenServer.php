@@ -55,7 +55,7 @@ class OpenServer
         return $this->clientCdGrant;
     }
 
-    public function getAppService(): Service\AppService
+    public function appService(): Service\AppService
     {
         if ($this->appService) {
             return $this->appService;

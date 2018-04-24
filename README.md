@@ -23,13 +23,14 @@ Gap\Open\Server\Grant\AuthCodeGrant
 Gap\Open\Server\Grant\ClientCdGrant
 - accessToken(string $appId, string $appSecret): ?AccessTokenDto
 
-Gap\Open\Server\Grant
+Gap\Open\Server\Grant\OpenIdGrant
 - idToken(string $userId) // todo
 - accessToken(string $appId, string $token): ?AccessTokenDto
 
-Gap\Open\Server\Service
+Gap\Open\Server\Service\AppService
 - fetch(string $appId): ?AppDto
 - create(AppDto $app): void
+- disable(AppDto $app): void
 
 Gap\Open\Server\Service\AccessTokenService
 - bearerAuthorize(string $bearerToken): bool

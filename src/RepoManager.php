@@ -20,7 +20,7 @@ class RepoManager
     protected $opts;
     protected $cnn;
 
-    public function __construct(CnnInterface $cnn, array $opts = [])
+    public function __construct(?CnnInterface $cnn, array $opts = [])
     {
         $this->cnn = $cnn;
         $this->opts = $opts;

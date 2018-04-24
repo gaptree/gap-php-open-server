@@ -16,13 +16,11 @@ class OpenServer
     protected $openIdGrant;
     protected $clientCdGrant;
 
-    protected $appService;
-
-    public function __construct(CnnInterface $cnn, array $opts = []) //?CacheInterface $cache = null)
+    public function __construct(?CnnInterface $cnn, ?CacheInterface $cache = null, array $repoOpts = []) //)
     {
         $this->cnn = $cnn;
-        $this->cache = $opts['cache'] ?? null;
-        $this->repoManager = new RepoManager($this->cnn, ($opts['repo'] ?? []));
+        $this->cache = $cache;
+        $this->repoManager = new RepoManager($this->cnn, $repoOpts);
     }
 
     public function authCodeGrant(): Grant\AuthCodeGrant
@@ -53,14 +51,5 @@ class OpenServer
 
         $this->clientCdGrant = new Grant\ClientCdGrant($this->cnn, $this->repoManager, $this->cache);
         return $this->clientCdGrant;
-    }
-
-    public function appService(): Service\AppService
-    {
-        if ($this->appService) {
-            return $this->appService;
-        }
-        $this->appService = new Service\AppService($this->repoManager, $this->cache);
-        return $this->appService;
     }
 }

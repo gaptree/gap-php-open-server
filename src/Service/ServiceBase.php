@@ -23,4 +23,22 @@ abstract class ServiceBase
             base64_encode(random_bytes($length))
         );
     }
+
+    protected function cacheGet(string $key, $default = null)
+    {
+        if (!$this->cache) {
+            return null;
+        }
+
+        $this->cache->get($key, $default);
+    }
+
+    protected function cacheSet(string $key, $value, $ttl = null): bool
+    {
+        if (!$this->cache) {
+            return false;
+        }
+
+        return $this->cache->set($key, $value, $ttl);
+    }
 }

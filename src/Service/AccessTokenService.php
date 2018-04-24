@@ -39,14 +39,31 @@ class AccessTokenService extends ServiceBase
         $this->getRepo()->create($accessToken);
     }
 
-    public function fetch(string $token): AccessTokenDto
+    public function fetch(string $token): ?AccessTokenDto
     {
-        if ($this->cache) {
-            if ($accessToken = $this->cache->get($token)) {
-                return $accessToken;
-            }
+        if ($accessToken = $this->cacheGet($token)) {
+            return $accessToken;
         }
-        return $this->getRepo()->fetch($token);
+
+        if ($accessToken = $this->getRepo()->fetch($token)) {
+            $this->cacheSet($accessToken->token, $accessToken, $this->getTtl());
+        }
+
+        return $accessToken;
+    }
+
+    public function bearerAuthorize(string $bearerToken): bool
+    {
+        if (0 !== strpos($bearerToken, 'Bearer ')) {
+            return false;
+        }
+
+        $token = substr($bearerToken, 7);
+        if ($this->fetch($token)) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function getTtl(): \DateInterval

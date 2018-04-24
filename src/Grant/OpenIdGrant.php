@@ -15,7 +15,28 @@ class OpenIdGrant extends GrantBase
     protected $issuer = 'http://www.gaptree.com';
     protected $idTokenTtl;
 
-    public function idToken(string $userId, string $privateKey)
+    private $publicKey = '';
+    private $privateKey = '';
+
+    public function setIssuer(string $issuer): self
+    {
+        $this->issuer = $issuer;
+        return $this;
+    }
+
+    public function setPublicKey(string $publicKey): self
+    {
+        $this->publicKey = $publicKey;
+        return $this;
+    }
+
+    public function setPrivateKey(string $privateKey): self
+    {
+        $this->privateKey = $privateKey;
+        return $this;
+    }
+
+    public function idToken(string $userId)
     {
         $user = $this->getUserService()->fetch($userId);
         if (is_null($user)) {
@@ -25,7 +46,7 @@ class OpenIdGrant extends GrantBase
         $signer = new Sha256();
         $keychain = new Keychain();
 
-        $token = (new Builder())->setIssuer($this->getIssuer()) // Configures the issuer (iss claim)
+        $token = (new Builder())->setIssuer($this->issuer) // Configures the issuer (iss claim)
             //->setAudience('http://example.org') // Configures the audience (aud claim)
             //->setId('4f1g23a12aa', true) // Configures the id (jti claim), replicating as a header item
             ->setIssuedAt(time()) // Configures the time that the token was issue (iat claim)
@@ -33,19 +54,19 @@ class OpenIdGrant extends GrantBase
             ->setExpiration($this->getIdTokenExpired()) // Configures the expiration time of the token (exp claim)
             ->set('userId', $user->userId) // Configures a new claim, called "uid"
             ->set('nick', $user->nick)
-            ->sign($signer, $keychain->getPrivateKey($privateKey))
+            ->sign($signer, $keychain->getPrivateKey($this->privateKey))
             ->getToken(); // Retrieves the generated token
 
         return $token;
     }
 
-    public function accessToken(string $appId, string $tokenStr, string $publicKey): ?AccessTokenDto
+    public function accessToken(string $appId, string $tokenStr): ?AccessTokenDto
     {
         $token = (new Parser())->parse($tokenStr);
         $signer = new Sha256();
         $keychain = new Keychain();
 
-        if (!$token->verify($signer, $keychain->getPublicKey($publicKey))) {
+        if (!$token->verify($signer, $keychain->getPublicKey($this->publicKey))) {
             return null;
         }
 
@@ -66,11 +87,6 @@ class OpenIdGrant extends GrantBase
 
         $this->userService = new UserService($this->repoManager, $this->cache);
         return $this->userService;
-    }
-
-    protected function getIssuer(): string
-    {
-        return $this->issuer;
     }
 
     protected function getIdTokenTtl(): \DateInterval

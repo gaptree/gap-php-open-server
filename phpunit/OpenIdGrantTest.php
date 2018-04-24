@@ -25,7 +25,18 @@ class OpenIdGrantTest extends TestCase
         $serverId = 'xdfsa';
         $cnn = new Cnn($pdo, $serverId);
 
-        $openServer = new OpenServer($cnn);
+        $publicKey =
+            '-----BEGIN PUBLIC KEY-----' . "\n"
+            . 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDozCTehrdWbeYvhASW3kyIpZnh'
+            . 'FumsSHnoIVxlSXv3eMbBSGJ/urhL/A+F18gL4NpTcaU03C5qoZTR20QwHk73pZXE'
+            . '9dZtyFKg5xjxdKvqHhYGDXy5T/tSeD7QwIAnmdVjwvKydITcY1e3NUggRDhu9VYj'
+            . '4c50TXeg/V25GxFoiQIDAQAB' . "\n"
+            . '-----END PUBLIC KEY-----';
+        $openServer = new OpenServer($cnn, null, [
+            'privateKey' => 'file://' . __DIR__ . '/private.pem',
+            'publicKey' => $publicKey
+        ]);
+
         $openIdGrant = $openServer->openIdGrant();
 
         $userId = 'fake-user-id';
@@ -38,19 +49,12 @@ class OpenIdGrantTest extends TestCase
         );
 
 
-        $idToken = $openIdGrant->idToken($userId, 'file://' . __DIR__ . '/private.pem');
+        $idToken = $openIdGrant->idToken($userId);
         $tokenStr = (string) $idToken;
         $appId = 'fake-app-id';
 
-        $publicKey =
-            '-----BEGIN PUBLIC KEY-----' . "\n"
-            . 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDozCTehrdWbeYvhASW3kyIpZnh'
-            . 'FumsSHnoIVxlSXv3eMbBSGJ/urhL/A+F18gL4NpTcaU03C5qoZTR20QwHk73pZXE'
-            . '9dZtyFKg5xjxdKvqHhYGDXy5T/tSeD7QwIAnmdVjwvKydITcY1e3NUggRDhu9VYj'
-            . '4c50TXeg/V25GxFoiQIDAQAB' . "\n"
-            . '-----END PUBLIC KEY-----';
         // or $accessToken = $openIdGrant->accessToken($appId, $tokenStr, 'file://' . __DIR__ . '/public.pem');
-        $accessToken = $openIdGrant->accessToken($appId, $tokenStr, $publicKey);
+        $accessToken = $openIdGrant->accessToken($appId, $tokenStr);
 
         if (is_null($accessToken)) {
             return;

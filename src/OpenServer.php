@@ -8,21 +8,30 @@ use Psr\SimpleCache\CacheInterface;
 
 class OpenServer
 {
-    protected $cnn;
-    protected $cache;
-    protected $repoManager;
+    private $cnn;
+    private $cache;
+    private $repoManager;
 
-    protected $authCodeGrant;
-    protected $openIdGrant;
-    protected $clientCdGrant;
+    private $authCodeGrant;
+    private $openIdGrant;
+    private $clientCdGrant;
 
-    protected $appService;
+    private $appService;
+    private $accessTokenService;
 
-    public function __construct(?CnnInterface $cnn, ?CacheInterface $cache = null, array $repoOpts = []) //)
+    private $publicKey;
+    private $privateKey;
+    private $issuer;
+
+    public function __construct(?CnnInterface $cnn = null, ?CacheInterface $cache = null, array $opts = []) //)
     {
         $this->cnn = $cnn;
         $this->cache = $cache;
-        $this->repoManager = new RepoManager($this->cnn, $repoOpts);
+        $this->repoManager = new RepoManager($this->cnn, ($opts['repo'] ?? []));
+
+        $this->publicKey = $opts['publicKey'] ?? '';
+        $this->privateKey = $opts['privateKey'] ?? '';
+        $this->issuer = $opts['issuer'] ?? 'http://www.gaptree.com';
     }
 
     public function authCodeGrant(): Grant\AuthCodeGrant
@@ -42,6 +51,9 @@ class OpenServer
         }
 
         $this->openIdGrant = new Grant\OpenIdGrant($this->cnn, $this->repoManager, $this->cache);
+        $this->openIdGrant->setPublicKey($this->publicKey);
+        $this->openIdGrant->setPrivateKey($this->privateKey);
+        $this->openIdGrant->setIssuer($this->issuer);
         return $this->openIdGrant;
     }
 
@@ -63,5 +75,15 @@ class OpenServer
 
         $this->appService = new Service\AppService($this->repoManager, $this->cache);
         return $this->appService;
+    }
+
+    public function accessTokenService(): Service\AccessTokenService
+    {
+        if ($this->accessTokenService) {
+            return $this->accessTokenService;
+        }
+
+        $this->accessTokenService = new Service\AccessTokenService($this->repoManager, $this->cache);
+        return $this->accessTokenService;
     }
 }

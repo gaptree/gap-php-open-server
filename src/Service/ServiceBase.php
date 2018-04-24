@@ -41,4 +41,13 @@ abstract class ServiceBase
 
         return $this->cache->set($key, $value, $ttl);
     }
+
+    protected function cacheDelete(string $key): bool
+    {
+        if (!$this->cache) {
+            return false;
+        }
+
+        return $this->cache->delete($key);
+    }
 }

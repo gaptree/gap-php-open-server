@@ -57,4 +57,15 @@ class AppRepo extends RepoBase implements Contract\AppRepoInterface
             ->end()
             ->fetch(AppDto::class);
     }
+
+    public function disable(AppDto $app): void
+    {
+        $this->cnn->usb()
+            ->update($this->table)->end()
+                ->set('status')->str('disabled')
+            ->where()
+                ->expect('appId')->equal()->str($app->appId)
+            ->end()
+            ->execute();
+    }
 }

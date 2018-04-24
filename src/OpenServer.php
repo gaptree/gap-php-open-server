@@ -23,7 +23,7 @@ class OpenServer
     private $privateKey;
     private $issuer;
 
-    public function __construct(?CnnInterface $cnn = null, ?CacheInterface $cache = null, array $opts = []) //)
+    public function __construct(?CnnInterface $cnn = null, ?CacheInterface $cache = null, array $opts = [])
     {
         $this->cnn = $cnn;
         $this->cache = $cache;

@@ -11,21 +11,28 @@ class AppService extends ServiceBase
 
     public function create(AppDto $app): void
     {
-        if ($this->cache) {
-            $this->cache->set($app->appId, $app);
-        }
-
+        $this->cacheSet($app->appId, $app);
         $this->getRepo()->create($app);
     }
 
     public function fetch(string $appId): ?AppDto
     {
-        if ($this->cache) {
-            if ($app = $this->cache->get($appId)) {
-                return $app;
-            }
+        if ($app = $this->cacheGet($appId)) {
+            return $app;
         }
-        return $this->getRepo()->fetch($appId);
+
+        if ($app = $this->getRepo()->fetch($appId)) {
+            $this->cacheSet($appId, $app);
+            return $app;
+        }
+
+        return null;
+    }
+
+    public function disable(AppDto $app): void
+    {
+        $this->getRepo()->disable($app);
+        $this->cacheDelete($app->appId);
     }
 
     protected function getRepo(): AppRepoInterface

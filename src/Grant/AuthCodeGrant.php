@@ -26,7 +26,7 @@ class AuthCodeGrant extends GrantBase
         return $authCode;
     }
 
-    public function accessToken($appId, $code): ?AccessTokenDto
+    public function accessToken(string $appId, string $code): ?AccessTokenDto
     {
         $authCodeService = $this->getAuthCodeService();
         $authCode = $authCodeService->fetch($code);

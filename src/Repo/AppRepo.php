@@ -20,6 +20,7 @@ class AppRepo extends RepoBase implements Contract\AppRepoInterface
             ->insert($this->table)
             ->field(
                 'appId',
+                'appCode',
                 'appSecret',
                 'appName',
                 'redirectUrl',
@@ -28,6 +29,7 @@ class AppRepo extends RepoBase implements Contract\AppRepoInterface
                 'changed'
             )->value()
                 ->addStr($app->appId)
+                ->addStr($app->appCode)
                 ->addStr($app->appSecret)
                 ->addStr($app->appName)
                 ->addStr($app->redirectUrl)

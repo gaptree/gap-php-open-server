@@ -9,7 +9,7 @@ $ composer require gap/open-server
 ## API
 
 Gap\Open\Server\OpenServer
-- __construct(?CnnInterface $cnn = null, ?CacheInterface $cache = null, array $opts = [])
+- __construct(array $opts = [])
 - authCodeGrant(): Grant\AuthCodeGrant
 - openIdGrant(): Grant\OpenIdGrant
 - clientCdGrant(): Grant\ClientCdGrant
@@ -41,7 +41,7 @@ Gap\Open\Server\Service\AccessTokenService
 
 ```php
 $cnn = new Cnn($pdo, $serverId);
-$openServer = new OpenServer($cnn);
+$openServer = new OpenServer(['cnn' => $cnn]);
 $authCodeGrant = $openServer->authCodeGrant();
 
 $appId = 'fake-app-id';
@@ -91,7 +91,9 @@ $privateKey =
     . 'xxx' . "\n"
     . '------END RSA PRIVATE KEY----';
 
-$openServer = new OpenServer($cnn, $cache, [
+$openServer = new OpenServer([
+    'cnn' => $cnn,
+    'cache' => $cache,
     'publicKey' => $publicKey,
     'privateKey' => $privateKey
 ]);
@@ -129,7 +131,8 @@ CREATE TABLE `open_access_token` (
 CREATE TABLE `open_app` (
   `appId` varbinary(64) NOT NULL,
   `appSecret` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `appName` varchar(21) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `appCode` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `appName` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `redirectUrl` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
   `privilege` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `scope` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',

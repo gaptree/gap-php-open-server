@@ -26,7 +26,7 @@ class ClientCdGrantTest extends TestCase
             ])
         );
 
-        $openServer = new OpenServer($cnn);
+        $openServer = new OpenServer(['cnn' => $cnn]);
         $clientCdGrant = $openServer->clientCdGrant();
 
         $appId = 'fake-app-id';

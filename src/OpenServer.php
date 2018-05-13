@@ -1,8 +1,8 @@
 <?php
 namespace Gap\Open\Server;
 
-use Gap\Db\Contract\CnnInterface;
-use Psr\SimpleCache\CacheInterface;
+//use Gap\Db\Contract\CnnInterface;
+//use Psr\SimpleCache\CacheInterface;
 
 // https://www.php-fig.org/psr/psr-16/
 
@@ -23,10 +23,11 @@ class OpenServer
     private $privateKey;
     private $issuer;
 
-    public function __construct(?CnnInterface $cnn = null, ?CacheInterface $cache = null, array $opts = [])
+    //public function __construct(?CnnInterface $cnn = null, ?CacheInterface $cache = null, array $opts = [])
+    public function __construct(array $opts = [])
     {
-        $this->cnn = $cnn;
-        $this->cache = $cache;
+        $this->cnn = $opts['cnn'] ?? null;
+        $this->cache = $opts['cache'] ?? null;
         $this->repoManager = new RepoManager($this->cnn, ($opts['repo'] ?? []));
 
         $this->publicKey = $opts['publicKey'] ?? '';

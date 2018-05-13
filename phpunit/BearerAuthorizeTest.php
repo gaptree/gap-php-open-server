@@ -33,7 +33,7 @@ class BearerAuthorizeTest extends TestCase
             ])
         );
 
-        $openServer = new OpenServer($cnn);
+        $openServer = new OpenServer(['cnn' => $cnn]);
 
         $this->assertTrue(
             $openServer->accessTokenService()

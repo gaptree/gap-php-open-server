@@ -32,7 +32,8 @@ class OpenIdGrantTest extends TestCase
             . '9dZtyFKg5xjxdKvqHhYGDXy5T/tSeD7QwIAnmdVjwvKydITcY1e3NUggRDhu9VYj'
             . '4c50TXeg/V25GxFoiQIDAQAB' . "\n"
             . '-----END PUBLIC KEY-----';
-        $openServer = new OpenServer($cnn, null, [
+        $openServer = new OpenServer([
+            'cnn' => $cnn,
             'privateKey' => 'file://' . __DIR__ . '/private.pem',
             'publicKey' => $publicKey
         ]);

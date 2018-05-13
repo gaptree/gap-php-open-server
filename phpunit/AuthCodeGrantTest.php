@@ -25,7 +25,7 @@ class AuthCodeGrantTest extends TestCase
         $serverId = 'xdfsa';
         $cnn = new Cnn($pdo, $serverId);
 
-        $openServer = new OpenServer($cnn);
+        $openServer = new OpenServer(['cnn' => $cnn]);
         $authCodeGrant = $openServer->authCodeGrant();
 
         $appId = 'fake-app-id';

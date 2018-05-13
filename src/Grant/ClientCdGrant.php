@@ -20,8 +20,7 @@ class ClientCdGrant extends GrantBase
         }
 
         $accessTokenService = $this->getAccessTokenService();
-        $accessToken = $accessTokenService->generate($appId);
-        $accessTokenService->create($accessToken);
+        $accessToken = $accessTokenService->create(['appId' => $appId]);
         return $accessToken;
     }
 

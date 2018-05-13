@@ -87,13 +87,13 @@ class AuthCodeGrantTest extends TestCase
             $stmts[1]->sql()
         );
         $this->assertEquals(
-            'INSERT INTO open_access_token (token, appId, userId, refresh, scope, created, expired) '
-            . 'VALUES (:k10, :k11, :k12, :k13, :k14, :k15, :k16)',
+            'INSERT INTO open_refresh_token (refresh, appId, userId, scope, created, expired) '
+            . 'VALUES (:k10, :k11, :k12, :k13, :k14, :k15)',
             $stmts[2]->sql()
         );
         $this->assertEquals(
-            'INSERT INTO open_refresh_token (refresh, appId, userId, scope, created, expired) '
-            . 'VALUES (:k17, :k18, :k19, :k20, :k21, :k22)',
+            'INSERT INTO open_access_token (token, appId, userId, refresh, scope, created, expired) '
+            . 'VALUES (:k16, :k17, :k18, :k19, :k20, :k21, :k22)',
             $stmts[3]->sql()
         );
         $this->assertEquals(

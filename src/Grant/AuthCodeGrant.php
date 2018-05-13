@@ -43,23 +43,25 @@ class AuthCodeGrant extends GrantBase
 
         $accessTokenService = $this->getAccessTokenService();
         $refreshTokenService = $this->getRefreshTokenService();
-        $accessToken = $accessTokenService->generate(
-            $appId,
-            $authCode->userId,
-            $authCode->scope
-        );
-        $refreshToken = $refreshTokenService->generate(
-            $appId,
-            $authCode->userId,
-            $authCode->scope
-        );
-
-        $accessToken->refresh = $refreshToken->refresh;
 
         $this->cnn->trans()->begin();
+        $userId = $authCode->userId;
+        $scope = $authCode->scope;
+
         try {
-            $accessTokenService->create($accessToken);
-            $refreshTokenService->create($refreshToken);
+            $refreshToken = $refreshTokenService->create([
+                'appId' => $appId,
+                'userId' => $userId,
+                'scope' => $scope
+            ]);
+
+            $accessToken = $accessTokenService->create([
+                'appId' => $appId,
+                'userId' => $userId,
+                'scope' => $scope,
+                'refresh' => $refreshToken->refresh
+            ]);
+
             $authCodeService->destroy($authCode);
         } catch (\Exception $exp) {
             $this->cnn->trans()->rollback();

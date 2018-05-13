@@ -9,6 +9,7 @@ class RefreshTokenService extends ServiceBase
 {
     protected $ttl;
 
+    /*
     public function generate(
         string $appId,
         string $userId = '',
@@ -36,6 +37,34 @@ class RefreshTokenService extends ServiceBase
         }
 
         $this->getRepo()->create($refreshToken);
+    }
+    */
+
+    public function create(array $opts): RefreshTokenDto
+    {
+        $appId = $opts['appId'] ?? '';
+        $userId = $opts['userId'] ?? '';
+        $scope = $opts['scope'] ?? '';
+        $created = new DateTime();
+        $expired = (new DateTime())->add($this->getTtl());
+
+        if (empty($appId)) {
+            throw new \Exception('appId cannot be empty');
+        }
+
+        $refreshToken = new RefreshTokenDto([
+            'refresh' => $this->randomCode(),
+            'appId' => $appId,
+            'userId' => $userId,
+            'scope' => $scope,
+            'created' => $created,
+            'expired' => $expired
+        ]);
+
+        $this->cacheSet($refreshToken->refresh, $refreshToken, $this->getTtl());
+        $this->getRepo()->create($refreshToken);
+
+        return $refreshToken;
     }
 
     public function fetch(string $refresh): ?RefreshTokenDto

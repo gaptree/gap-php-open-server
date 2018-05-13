@@ -7,8 +7,9 @@ use Gap\Open\Server\Repo\Contract\AccessTokenRepoInterface;
 
 class AccessTokenService extends ServiceBase
 {
-    protected $ttl;
+    private $ttl;
 
+    /*
     public function generate(
         string $appId,
         string $userId = '',
@@ -29,7 +30,6 @@ class AccessTokenService extends ServiceBase
 
         return $accessToken;
     }
-
     public function create(AccessTokenDto $accessToken): void
     {
         if ($this->cache) {
@@ -37,6 +37,36 @@ class AccessTokenService extends ServiceBase
         }
 
         $this->getRepo()->create($accessToken);
+    }
+     */
+
+    public function create(array $opts): AccessTokenDto
+    {
+        $created = new DateTime();
+        $expired = (new DateTime())->add($this->getTtl());
+
+        $appId = $opts['appId'] ?? '';
+        $userId = $opts['userId'] ?? '';
+        $scope = $opts['score'] ?? '';
+        $refresh = $opts['refresh'] ?? '';
+
+        if (empty($appId)) {
+            throw new \Exception('appId cannot be empty');
+        }
+
+        $accessToken = new AccessTokenDto([
+            'token' => $this->randomCode(),
+            'refresh' => $refresh,
+            'appId' => $appId,
+            'userId' => $userId,
+            'scope' => $scope,
+            'created' => $created,
+            'expired' => $expired
+        ]);
+
+        $this->cacheSet($accessToken->token, $accessToken, $this->getTtl());
+        $this->getRepo()->create($accessToken);
+        return $accessToken;
     }
 
     public function fetch(string $token): ?AccessTokenDto

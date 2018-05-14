@@ -9,37 +9,6 @@ class AccessTokenService extends ServiceBase
 {
     private $ttl;
 
-    /*
-    public function generate(
-        string $appId,
-        string $userId = '',
-        string $scope = ''
-    ): AccessTokenDto {
-        $created = new DateTime();
-        $expired = (new DateTime())->add($this->getTtl());
-
-        $accessToken = new AccessTokenDto([
-            'token' => $this->randomCode(),
-            'refresh' => '',
-            'appId' => $appId,
-            'userId' => $userId,
-            'scope' => $scope,
-            'created' => $created,
-            'expired' => $expired
-        ]);
-
-        return $accessToken;
-    }
-    public function create(AccessTokenDto $accessToken): void
-    {
-        if ($this->cache) {
-            $this->cache->set($accessToken->token, $accessToken, $this->getTtl());
-        }
-
-        $this->getRepo()->create($accessToken);
-    }
-     */
-
     public function create(array $opts): AccessTokenDto
     {
         $created = new DateTime();
@@ -82,6 +51,15 @@ class AccessTokenService extends ServiceBase
         return $accessToken;
     }
 
+    public function extractToken(string $query): string
+    {
+        if (0 === strpos($query, 'Bearer ')) {
+            return substr($query, 7);
+        }
+
+        return '';
+    }
+
     public function bearerAuthorize(string $bearerToken): bool
     {
         if (0 !== strpos($bearerToken, 'Bearer ')) {
@@ -96,7 +74,7 @@ class AccessTokenService extends ServiceBase
         return false;
     }
 
-    protected function getTtl(): \DateInterval
+    private function getTtl(): \DateInterval
     {
         if ($this->ttl) {
             return $this->ttl;
@@ -106,7 +84,7 @@ class AccessTokenService extends ServiceBase
         return $this->ttl;
     }
 
-    protected function getRepo(): AccessTokenRepoInterface
+    private function getRepo(): AccessTokenRepoInterface
     {
         return $this->repoManager->getAccessTokenRepo();
     }

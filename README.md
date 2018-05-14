@@ -34,6 +34,8 @@ Gap\Open\Server\Service\AppService
 
 Gap\Open\Server\Service\AccessTokenService
 - bearerAuthorize(string $bearerToken): bool
+- extractToken(string $query): string
+- fetch(string $token): AccessTokenDto
 
 ## Usage
 

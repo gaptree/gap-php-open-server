@@ -6,5 +6,5 @@ use Gap\Open\Dto\AccessTokenDto;
 interface AccessTokenRepoInterface
 {
     public function create(AccessTokenDto $accessToken): void;
-    public function fetch(string $token): AccessTokenDto;
+    public function fetch(string $token): ?AccessTokenDto;
 }

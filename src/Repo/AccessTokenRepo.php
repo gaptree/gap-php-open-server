@@ -31,7 +31,7 @@ class AccessTokenRepo extends RepoBase implements Contract\AccessTokenRepoInterf
             ->execute();
     }
 
-    public function fetch(string $token): AccessTokenDto
+    public function fetch(string $token): ?AccessTokenDto
     {
         return $this->cnn->ssb()
             ->select(

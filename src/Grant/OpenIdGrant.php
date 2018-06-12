@@ -54,10 +54,24 @@ class OpenIdGrant extends GrantBase
             ->setExpiration($this->getIdTokenExpired()) // Configures the expiration time of the token (exp claim)
             ->set('userId', $user->userId) // Configures a new claim, called "uid"
             ->set('nick', $user->nick)
+            ->set('user', $user)
             ->sign($signer, $keychain->getPrivateKey($this->privateKey))
             ->getToken(); // Retrieves the generated token
 
         return $token;
+    }
+
+    public function getUser(string $tokenStr)
+    {
+        $token = (new Parser())->parse($tokenStr);
+        $signer = new Sha256();
+        $keychain = new Keychain();
+
+        if (!$token->verify($signer, $keychain->getPublicKey($this->publicKey))) {
+            return null;
+        }
+
+        return $token->getClaim('user');
     }
 
     public function accessToken(string $appId, string $tokenStr): ?AccessTokenDto

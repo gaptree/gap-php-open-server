@@ -48,12 +48,12 @@ class RepoManager
 
     public function getUserRepo(): UserRepoInterface
     {
-        if (isset($this->opts['app'])) {
-            return $this->opts['app'];
+        if (isset($this->opts['user'])) {
+            return $this->opts['user'];
         }
 
-        $this->opts['app'] = new UserRepo($this->cnn);
-        return $this->opts['app'];
+        $this->opts['user'] = new UserRepo($this->cnn);
+        return $this->opts['user'];
     }
 
     public function getAuthCodeRepo(): AuthCodeRepoInterface

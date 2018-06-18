@@ -31,7 +31,7 @@ class AuthCodeGrantTest extends TestCase
         $appId = 'fake-app-id';
         $userId = 'fake-user-id';
         $redirectUrl = 'fake-redirect-url';
-        $scope = '';
+        $scope = 'openId';
 
         $authCode = $authCodeGrant->authCode(
             $appId,
@@ -47,13 +47,12 @@ class AuthCodeGrantTest extends TestCase
             $this->returnValue($authCode->getData())
         );
 
-        $accessToken = $authCodeGrant->accessToken(
-            $appId,
-            $authCode->code
-        );
+        $accessToken = $authCodeGrant->accessToken($appId, $authCode->code);
         if (is_null($accessToken)) {
             return;
         }
+
+        $this->assertEquals($scope, $accessToken->scope);
 
         $stmts = $cnn->executed();
 
@@ -65,21 +64,12 @@ class AuthCodeGrantTest extends TestCase
             $createAuthCodeStmt->sql()
         );
 
-        $this->assertEquals(
-            $appId,
-            $authCode->appId
-        );
+        $this->assertEquals($appId, $authCode->appId);
 
         $vals = $createAuthCodeStmt->vals();
-        $this->assertEquals(
-            $appId,
-            $vals[':k2']
-        );
+        $this->assertEquals($appId, $vals[':k2']);
 
-        $this->assertEquals(
-            $authCode->code,
-            $vals[':k1']
-        );
+        $this->assertEquals($authCode->code, $vals[':k1']);
 
         $this->assertEquals(
             'SELECT code, appId, userId, redirectUrl, scope, created, expired '

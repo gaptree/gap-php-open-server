@@ -16,7 +16,7 @@ class AccessTokenService extends ServiceBase
 
         $appId = $opts['appId'] ?? '';
         $userId = $opts['userId'] ?? '';
-        $scope = $opts['score'] ?? '';
+        $scope = $opts['scope'] ?? '';
         $refresh = $opts['refresh'] ?? '';
 
         if (empty($appId)) {

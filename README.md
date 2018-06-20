@@ -124,7 +124,8 @@ CREATE TABLE `open_access_token` (
   `userId` varbinary(64) NOT NULL,
   `refresh` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
   `scope` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `diff` int(10) unsigned NOT NULL DEFAULT '0',
+  `diff` int(10) unsigned NOT NULL DEFAULT 0,
+  `info` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created` datetime NOT NULL,
   `expired` datetime NOT NULL,
   PRIMARY KEY (`token`)

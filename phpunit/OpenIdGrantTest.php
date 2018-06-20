@@ -50,8 +50,15 @@ class OpenIdGrantTest extends TestCase
         );
 
 
-        $idToken = $openIdGrant->idToken($userId);
+        $info = ['a' => 1, 'b' => 'fdafa'];
+        $idToken = $openIdGrant->idToken($userId, $info);
+        $this->assertEquals(
+            $info,
+            $idToken->getClaim('info')
+        );
+
         $tokenStr = (string) $idToken;
+
         $appId = 'fake-app-id';
 
         // or $accessToken = $openIdGrant->accessToken($appId, $tokenStr, 'file://' . __DIR__ . '/public.pem');

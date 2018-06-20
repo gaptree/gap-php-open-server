@@ -36,7 +36,7 @@ class OpenIdGrant extends GrantBase
         return $this;
     }
 
-    public function idToken(string $userId)
+    public function idToken(string $userId, array $info = [])
     {
         $user = $this->getUserService()->fetch($userId);
         if (is_null($user)) {
@@ -54,7 +54,7 @@ class OpenIdGrant extends GrantBase
             ->setExpiration($this->getIdTokenExpired()) // Configures the expiration time of the token (exp claim)
             ->set('userId', $user->userId) // Configures a new claim, called "uid"
             ->set('nick', $user->nick)
-            ->set('user', $user)
+            ->set('info', $info)
             ->sign($signer, $keychain->getPrivateKey($this->privateKey))
             ->getToken(); // Retrieves the generated token
 

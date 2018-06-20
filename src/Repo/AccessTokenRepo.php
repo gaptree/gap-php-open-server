@@ -9,6 +9,8 @@ class AccessTokenRepo extends RepoBase implements Contract\AccessTokenRepoInterf
 
     public function create(AccessTokenDto $accessToken): void
     {
+        $info = json_encode($accessToken->info);
+
         $this->cnn->isb()
             ->insert($this->table)
             ->field(
@@ -17,6 +19,7 @@ class AccessTokenRepo extends RepoBase implements Contract\AccessTokenRepoInterf
                 'userId',
                 'refresh',
                 'scope',
+                'info',
                 'created',
                 'expired'
             )->value()
@@ -25,6 +28,7 @@ class AccessTokenRepo extends RepoBase implements Contract\AccessTokenRepoInterf
                 ->addStr($accessToken->userId)
                 ->addStr($accessToken->refresh)
                 ->addStr($accessToken->scope)
+                ->addStr($info)
                 ->addDateTime($accessToken->created)
                 ->addDateTime($accessToken->expired)
             ->end()
@@ -40,6 +44,7 @@ class AccessTokenRepo extends RepoBase implements Contract\AccessTokenRepoInterf
                 'userId',
                 'refresh',
                 'scope',
+                'info',
                 'created',
                 'expired'
             )

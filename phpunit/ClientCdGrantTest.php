@@ -58,8 +58,8 @@ class ClientCdGrantTest extends TestCase
 
         $this->assertEquals(
             'INSERT INTO '
-            . 'open_access_token (token, appId, userId, refresh, scope, created, expired) '
-            . 'VALUES (:k2, :k3, :k4, :k5, :k6, :k7, :k8)',
+            . 'open_access_token (token, appId, userId, refresh, scope, info, created, expired) '
+            . 'VALUES (:k2, :k3, :k4, :k5, :k6, :k7, :k8, :k9)',
             $insertStmt->sql()
         );
     }

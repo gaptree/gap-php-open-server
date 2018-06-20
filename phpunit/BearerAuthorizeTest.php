@@ -44,7 +44,7 @@ class BearerAuthorizeTest extends TestCase
         $fetchStmt = $stmts[0];
 
         $this->assertEquals(
-            'SELECT token, appId, userId, refresh, scope, created, expired '
+            'SELECT token, appId, userId, refresh, scope, info, created, expired '
             . 'FROM open_access_token WHERE token = :k1 LIMIT 1',
             $fetchStmt->sql()
         );

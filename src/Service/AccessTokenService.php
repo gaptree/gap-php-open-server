@@ -29,6 +29,7 @@ class AccessTokenService extends ServiceBase
             'appId' => $appId,
             'userId' => $userId,
             'scope' => $scope,
+            'info' => $opts['info'] ?? [],
             'created' => $created,
             'expired' => $expired
         ]);

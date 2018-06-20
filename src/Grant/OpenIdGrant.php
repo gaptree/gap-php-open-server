@@ -87,7 +87,8 @@ class OpenIdGrant extends GrantBase
         $accessTokenService = $this->getAccessTokenService();
         $accessToken = $accessTokenService->create([
             'appId' => $appId,
-            'userId' => $token->getClaim('userId')
+            'userId' => $token->getClaim('userId'),
+            'info' => $token->getClaim('info')
         ]);
         return $accessToken;
     }

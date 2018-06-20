@@ -82,12 +82,12 @@ class AuthCodeGrantTest extends TestCase
             $stmts[2]->sql()
         );
         $this->assertEquals(
-            'INSERT INTO open_access_token (token, appId, userId, refresh, scope, created, expired) '
-            . 'VALUES (:k16, :k17, :k18, :k19, :k20, :k21, :k22)',
+            'INSERT INTO open_access_token (token, appId, userId, refresh, scope, info, created, expired) '
+            . 'VALUES (:k16, :k17, :k18, :k19, :k20, :k21, :k22, :k23)',
             $stmts[3]->sql()
         );
         $this->assertEquals(
-            'UPDATE open_auth_code SET status = :k23 WHERE code = :k24',
+            'UPDATE open_auth_code SET status = :k24 WHERE code = :k25',
             $stmts[4]->sql()
         );
 
@@ -98,7 +98,7 @@ class AuthCodeGrantTest extends TestCase
 
         $this->assertEquals(
             $authCode->code,
-            $stmts[4]->vals()[':k24']
+            $stmts[4]->vals()[':k25']
         );
     }
 
